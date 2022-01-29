@@ -11,4 +11,11 @@ class Product extends Model
 
     protected $guarded = [];
 
+    public static function matches($query_str)
+    {
+        return self::when($query_str, function ($query, $query_str) {
+            return $query->where('name', 'LIKE', "%{$query_str}%");
+        });
+    }
+
 }

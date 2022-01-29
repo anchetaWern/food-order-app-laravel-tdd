@@ -5,51 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Order;
+use App\Services\CartService;
 
 class CheckoutController extends Controller
 {
-    public function index()
+    public function index(CartService $cart)
     {
-        $items = Product::whereIn('id', collect(session('cart'))->pluck('id'))->get();
-        $checkout_items = collect(session('cart'))->map(function ($row, $index) use ($items) {
-            $qty = (int) $row['qty'];
-            $cost = (float) $items[$index]->cost;
-            $subtotal = $cost * $qty;
-
-            return [
-                'id' => $row['id'],
-                'qty' => $qty,
-                'name' => $items[$index]->name,
-                'cost' => $cost,
-                'subtotal' => round($subtotal, 2),
-            ];
-        });
-
-        $total = $checkout_items->sum('subtotal');
-        $checkout_items = $checkout_items->toArray();
+        $checkout_items = $cart->get();
+        $total = $cart->total();
 
         return view('checkout', compact('checkout_items', 'total'));
     }
 
 
-    public function create()
+    public function create(CartService $cart)
     {
-        $items = Product::whereIn('id', collect(session('cart'))->pluck('id'))->get();
-        $checkout_items = collect(session('cart'))->map(function ($row, $index) use ($items) {
-            $qty = (int) $row['qty'];
-            $cost = (float) $items[$index]->cost;
-            $subtotal = $cost * $qty;
-
-            return [
-                'id' => $row['id'],
-                'qty' => $qty,
-                'name' => $items[$index]->name,
-                'cost' => $cost,
-                'subtotal' => round($subtotal, 2),
-            ];
-        });
-
-        $total = $checkout_items->sum('subtotal');
+        $checkout_items = $cart->get();
+        $total = $cart->total();
 
         $order = Order::create([
             'total' => $total,
