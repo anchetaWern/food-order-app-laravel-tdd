@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\SearchProductsController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PaymentIntentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,21 +15,17 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', [SearchProductsController::class, 'index']);
 
-Route::get('/', function () {
-    return view('search');
-});
-
-Route::get('/cart', function () {
-    return view('cart');
-});
+Route::get('/cart', [CartController::class, 'index']);
+Route::post('/cart', [CartController::class, 'store']);
+Route::delete('/cart/{id}', [CartController::class, 'destroy']);
+Route::patch('/cart/{id}', [CartController::class, 'update']);
 
 
-Route::get('/checkout', function () {
-    $stripe_key = config('services.stripe.public_key');
+Route::get('/checkout', [CheckoutController::class, 'index']);
+Route::post('/checkout', [CheckoutController::class, 'create']);
 
-    return view('checkout', compact('stripe_key'));
-});
 
 Route::get('/summary', function () {
     return view('summary');
