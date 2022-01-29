@@ -71,7 +71,6 @@ class CartTest extends TestCase
                 'name' => 'Taco',
                 'image' => 'some-image.jpg',
                 'cost' => 1.5,
-                'subtotal' => 1.5,
             ],
             [
                 'id' => 3,
@@ -79,7 +78,6 @@ class CartTest extends TestCase
                 'name' => 'BBQ',
                 'image' => 'some-image.jpg',
                 'cost' => 3.2,
-                'subtotal' => 3.2,
             ],
         ];
 
