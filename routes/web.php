@@ -23,9 +23,7 @@ Route::get('/cart', function () {
 
 
 Route::get('/checkout', function () {
-    $stripe_key = config('services.stripe.public_key');
-
-    return view('checkout', compact('stripe_key'));
+    return view('checkout');
 });
 
 Route::get('/summary', function () {
